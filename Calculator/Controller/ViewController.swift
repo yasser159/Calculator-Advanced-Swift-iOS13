@@ -14,7 +14,6 @@ class ViewController: UIViewController {
     
     private var isFinishedTypingNumber: Bool = true
     
-    
     private var displayValue: Double{
         get{
             guard let number = Double(displayLabel.text!) else {
@@ -28,13 +27,15 @@ class ViewController: UIViewController {
     }
     
     
-    
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         
         //What should happen when a non-number button is pressed
         
         isFinishedTypingNumber = true
                 
+        CalculatorLogic.calculate()
+        
+        
         if let calcMethod =  sender.currentTitle {
             if calcMethod == "+/-" {
                 displayValue = displayValue * -1
@@ -43,9 +44,7 @@ class ViewController: UIViewController {
             } else if calcMethod == "%" {
                 displayValue = displayValue * 0.01
             }
-            
         }
-        
     }
 
     
@@ -67,18 +66,12 @@ class ViewController: UIViewController {
                     if !isInt {
                         return
                     }
-                    
                 }
                 
                 displayLabel.text = displayLabel.text! + numValue
             }
-            
-
-            
         }
         
         //displayLabel.text =
     }
-
 }
-
