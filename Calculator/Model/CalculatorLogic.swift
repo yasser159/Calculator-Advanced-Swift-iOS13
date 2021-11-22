@@ -1,38 +1,59 @@
-//
-//  CalculatorLogic.swift
-//  Calculator
-//
-//  Created by Yasser Hajlaoui on 11/21/21.
-//  Copyright © 2021 London App Brewery. All rights reserved.
-//
+
 
 import Foundation
 
-class CalculatorLogic{
+struct CalculatorLogic{
     
-    private var displayValue: Double{
-        get{
-            guard let number = Double(displayLabel.text!) else {
-                 fatalError("Cannot convert display label text to a Double")
-            }
-            return number
-        }
-        set {
-            displayLabel.text = String(newValue)
-        }
-        
+    private var number: Double?
     
-    func calculate(displayValue: double){
-        
-        if let calcMethod =  displayValue {
-            if calcMethod == "+/-" {
-                displayValue = displayValue * -1
-            } else if calcMethod == "AC" {
-                displayValue = 0
-            } else if calcMethod == "%" {
-                displayValue = displayValue * 0.01
-            }
-        }
+    private var intermediateCalculation: (n1: Double, calcMethod: String)?
+    
+    mutating func setNumber(_ number: Double){
+        self.number =  number
     }
+    
+    mutating func calculate(symbol: String) -> Double? {
+        
+        if let n = number {
+            switch symbol {
+            case "+/-":
+                return n * -1
+            case "AC":
+                return 0
+            case "%":
+                return n * 0.01
+            case "=":
+                return performTwoNumberCalculation(n2: n)
+            default:
+                intermediateCalculation = (n1: n, calcMethod: symbol)
+            }
+        }
+        return nil
+    }
+    
+    
+    
+    
+    
+    
+   private  func performTwoNumberCalculation(n2: Double) -> Double? {
+       
+       if let n1 = intermediateCalculation?.n1,
+            let operation = intermediateCalculation?.calcMethod {
+           
+           switch operation {
+           case "+":
+               return n1 + n2
+           case "-":
+               return n1 - n2
+           case "×":
+               return n1 * n2
+           case "÷":
+               return n1 / n2
+           default:
+               fatalError("The operation passed in does not match any of the cases.")
+           }
+       }
+       return nil
+   }
 }
-
